@@ -3,8 +3,8 @@ const path = require('path');
 const chokidar = require('chokidar');
 
 module.exports.info = {
-  id: 'char-refresh',
-  name: 'Character Folder Refresher',
+  id: 'auto-refresh',
+  name: 'Auto-refresh Character folder',
   description: 'Signals the UI whenever the character folder changes'
 };
 
@@ -20,7 +20,7 @@ module.exports.init = async function init(router) {
     res.json({ lastChange })
   );
 
-  console.log('[char-refresh] REST GET /api/plugins/char-refresh/last-change registered');
+  console.log('[auto-refresh] REST GET /api/plugins/auto-refresh/last-change registered');
 
   const watcher = chokidar.watch(CHAR_DIR, {
     ignoreInitial: true,
@@ -32,9 +32,9 @@ module.exports.init = async function init(router) {
 
   watcher.on('all', (evt, file) => {
     if (!file.match(/\.(png|json|webp)$/i)) return;
-    console.log(`[char-refresh] ${evt}: ${path.basename(file)}`);
+    console.log(`[auto-refresh] ${evt}: ${path.basename(file)}`);
     lastChange = Date.now();
   });
 
-  console.log('[char-refresh] Watching for character changes in:', CHAR_DIR);
+  console.log('[auto-refresh] Watching for character changes in:', CHAR_DIR);
 };

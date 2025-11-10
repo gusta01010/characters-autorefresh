@@ -4,7 +4,7 @@
 
   async function poll() {
     try {
-      const r = await fetch('/api/plugins/char-refresh/last-change');
+      const r = await fetch('/api/plugins/characters-autorefresh/last-change');
       if (!r.ok) throw new Error(r.statusText);
       const { lastChange } = await r.json();
 
