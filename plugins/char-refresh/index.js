@@ -1,30 +1,40 @@
-(() => {
-  const POLL_EVERY = 2000;            // 2 s
-  let lastSeen = 0;
+const fs = require('fs');
+const path = require('path');
+const chokidar = require('chokidar');
 
-  async function poll() {
-    try {
-      const r = await fetch('/api/plugins/char-refresh/last-change');
-      if (!r.ok) throw new Error(r.statusText);
-      const { lastChange } = await r.json();
+module.exports.info = {
+  id: 'char-refresh',
+  name: 'Character Folder Refresher',
+  description: 'Signals the UI whenever the character folder changes'
+};
 
-      if (lastChange > lastSeen) {
-        lastSeen = lastChange;
-        console.log('[auto-refresh] change detected → reload list');
-        await SillyTavern.getContext().getCharacters();   // same fn the UI uses
-      }
-    } catch (e) {
-      console.warn('[auto-refresh] poll failed:', e.message);
-    }
-  }
+/**
+ * @param {import('express').Router} router Express router
+ * @returns {Promise<void>}
+ */
+module.exports.init = async function init(router) {
+  const CHAR_DIR = path.resolve(__dirname, '..', '..', '..', 'public', 'characters');
+  let lastChange = Date.now();
 
-  function start() {
-    setInterval(poll, POLL_EVERY);
-    poll();
-    console.log('[auto-refresh] polling started');
-  }
+  router.get('/last-change', (_req, res) =>
+    res.json({ lastChange })
+  );
 
-  // wait until ST is fully booted
-  if (document.readyState === 'complete') start();
-  else window.addEventListener('load', start);
-})();
+  console.log('[char-refresh] REST GET /api/plugins/char-refresh/last-change registered');
+
+  const watcher = chokidar.watch(CHAR_DIR, {
+    ignoreInitial: true,
+    usePolling: true,
+    interval: 1000,
+    depth: 0,
+    awaitWriteFinish: { stabilityThreshold: 300 }
+  });
+
+  watcher.on('all', (evt, file) => {
+    if (!file.match(/\.(png|json|webp)$/i)) return;
+    console.log(`[char-refresh] ${evt}: ${path.basename(file)}`);
+    lastChange = Date.now();
+  });
+
+  console.log('[char-refresh] Watching for character changes in:', CHAR_DIR);
+};
