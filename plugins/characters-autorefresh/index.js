@@ -13,7 +13,7 @@ module.exports.info = {
  * @returns {Promise<void>}
  */
 module.exports.init = async function init(router) {
-  const CHAR_DIR = path.resolve(__dirname, '..', '..', '..', 'public', 'characters');
+  const CHAR_DIR = path.resolve(__dirname, '..', '..', 'data', 'default-user', 'characters');
   let lastChange = Date.now();
 
   router.get('/last-change', (_req, res) =>
