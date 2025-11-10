@@ -20,7 +20,7 @@ module.exports.init = async function init(router) {
     res.json({ lastChange })
   );
 
-  console.log('[auto-refresh] REST GET /api/plugins/auto-refresh/last-change registered');
+  console.log('[auto-refresh] REST GET /api/plugins/characters-autorefresh/last-change registered');
 
   const watcher = chokidar.watch(CHAR_DIR, {
     ignoreInitial: true,

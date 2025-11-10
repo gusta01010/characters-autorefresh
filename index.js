@@ -54,7 +54,7 @@
       <p>
         <b>1. Find the source folder:</b><br>
         If installed for <b>all users</b>: <code>SillyTavern/public/scripts/extensions/third-party/plugins/characters-autorefresh</code><br>
-        If installed for <b>just you</b>: <code>SillyTavern/data/extensions/plugins/characters-autorefresh</code>
+        If installed for <b>just you</b>: <code>SillyTavern/data/default-user/extensions/plugins/characters-autorefresh</code>
       </p>
 
       <p><b>2. Move that characters-autorefresh folder into:</b> <code>SillyTavern/plugins/</code></p>
