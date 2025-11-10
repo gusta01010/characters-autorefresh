@@ -7,18 +7,19 @@ let   lastChange = Date.now();
 
 module.exports.info = {
   id : 'char-refresh',
-  name : 'Character folder refresh',
+  name : 'Character folder refresher',
   description : 'Signals the UI whenever the character folder changes'
 };
 
 module.exports.init = async function init(router) {
+
 
   router.get('/last-change', (_req, res)=>
     res.json({ lastChange }) );
 
   console.log('[char-refresh] REST  GET /last-change  registered');
 
-  const refresh = chokidar.watch(CHAR_DIR, {
+  const watcher = chokidar.watch(CHAR_DIR, {
     ignoreInitial: true,
     usePolling: true,
     interval: 1000,
@@ -26,9 +27,9 @@ module.exports.init = async function init(router) {
     awaitWriteFinish: { stabilityThreshold: 300 }
   });
 
-  refresh.on('all', (evt, file) => {
+  watcher.on('all', (evt, file) => {
     if (!file.match(/\.(png|json)$/i)) return;  // only cards
-    console.log(`[char-refresh] ${evt}: ${path.basename(file)}`);
+    console.log(`[char-watcher] ${evt}: ${path.basename(file)}`);
     lastChange = Date.now();
   });
 
