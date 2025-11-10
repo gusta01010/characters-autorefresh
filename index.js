@@ -1,5 +1,5 @@
 (() => {
-  const POLL_EVERY = 3000;
+  const POLL_EVERY = 500;
   const NOTIFICATION_ID = 'autorefresh-plugin-notice';
   const STORAGE_KEY = 'autorefresh-hide-notice'; // Key for localStorage
 
