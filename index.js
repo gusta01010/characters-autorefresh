@@ -24,23 +24,21 @@
         #${NOTIFICATION_ID} h4 { margin: 0 0 10px 0; color: #58a6ff; font-size: 1.2em; }
         #${NOTIFICATION_ID} p { margin: 1em 0; line-height: 1.5; }
         
-        /* --- START OF THE FIX --- */
+
         #${NOTIFICATION_ID} code {
-          display: block; /* Make it a block element */
-          white-space: nowrap; /* Prevent the text from wrapping to a new line */
-          overflow-x: auto; /* Add a horizontal scrollbar ONLY if needed */
+          display: block;
+          white-space: nowrap;
+          overflow-x: auto;
           background-color: #1c1e24;
-          padding: 8px; /* Added a bit more padding for the scrollbar */
+          padding: 8px;
           border-radius: 5px;
           border: 1px solid #444;
-          /* Add a subtle scrollbar style for webkit browsers (Chrome, Edge, etc.) */
           scrollbar-width: thin;
           scrollbar-color: #555 #1c1e24;
         }
         #${NOTIFICATION_ID} code::-webkit-scrollbar { height: 8px; }
         #${NOTIFICATION_ID} code::-webkit-scrollbar-track { background: #1c1e24; }
         #${NOTIFICATION_ID} code::-webkit-scrollbar-thumb { background-color: #555; border-radius: 4px; }
-        /* --- END OF THE FIX --- */
 
         #${NOTIFICATION_ID} .dismiss-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #aaa; font-size: 24px; cursor: pointer; }
         #${NOTIFICATION_ID} .persist-option { float: right; margin-top: 10px; font-size: 13px; display: flex; align-items: center; gap: 5px; }
