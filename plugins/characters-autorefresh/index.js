@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const chokidar = require('chokidar');
 
 module.exports.info = {
   id: 'characters-autorefresh',
@@ -22,18 +21,16 @@ module.exports.init = async function init(router) {
 
   console.log('[auto-refresh] REST GET /api/plugins/characters-autorefresh/last-change registered');
 
-  const watcher = chokidar.watch(CHAR_DIR, {
-    ignoreInitial: true,
-    usePolling: true,
-    interval: 1000,
-    depth: 0,
-    awaitWriteFinish: { stabilityThreshold: 300 }
-  });
-
-  watcher.on('all', (evt, file) => {
-    if (!file.match(/\.(png|json|webp)$/i)) return;
-    console.log(`[auto-refresh] ${evt}: ${path.basename(file)}`);
-    lastChange = Date.now();
+  // use native fs.watch instead of chokidar
+  let debounceTimer;
+  fs.watch(CHAR_DIR, (eventType, filename) => {
+    if (!filename || !filename.match(/\.(png|json|webp)$/i)) return;
+    
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      console.log(`[auto-refresh] ${eventType}: ${filename}`);
+      lastChange = Date.now();
+    }, 300);
   });
 
   console.log('[auto-refresh] Watching for character changes in:', CHAR_DIR);
